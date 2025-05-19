@@ -5,6 +5,7 @@ namespace DevSpot.Data
 {
 	public class UserSeeder
 	{
+		// This method seeds the database with default users and their roles.
 		public static async Task SeedUsersAsync(IServiceProvider serviceProvider)
 		{
 			var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
@@ -14,6 +15,7 @@ namespace DevSpot.Data
 			await CreateUserWithRole(userManager, "employer@devspot.com", "Employer123!", Roles.Employer);
 		}
 
+		// Method to create a user with a specific role if the user does not already exist.
 		public static async Task CreateUserWithRole(UserManager<IdentityUser> userManager, string email, string password, string role)
 		{
 			if (await userManager.FindByEmailAsync(email) == null)
