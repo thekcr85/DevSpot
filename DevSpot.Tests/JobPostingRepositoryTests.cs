@@ -70,5 +70,46 @@ namespace DevSpot.Tests
 			Assert.NotNull(result);
 			Assert.Equal("Test Title", result.Title);
 		}
+
+		[Fact]
+		public async Task GetByIdAsync_ShouldThrowKeyNotFoundExeption()
+		{
+			var db = CreateDbContext();
+			var repository = new JobPostingRepository(db);
+
+			await Assert.ThrowsAsync<KeyNotFoundException>(() => repository.GetByIdAsync(999));
+		}
+
+		[Fact]
+		public async Task GetAllAsync_ShouldReturnAllJobPostings()
+		{
+			var db = CreateDbContext();
+			var repository = new JobPostingRepository(db);
+			var jobPosting1 = new JobPosting
+			{
+				Title = "Test Title 1",
+				Description = "Test Description 1",
+				PostedDate = DateTime.Now,
+				Company = "Test Company 1",
+				Location = "Test Location 1",
+				UserId = "TestUserId 1",
+			};
+			var jobPosting2 = new JobPosting
+			{
+				Title = "Test Title 2",
+				Description = "Test Description 2",
+				PostedDate = DateTime.Now,
+				Company = "Test Company 2",
+				Location = "Test Location 2",
+				UserId = "TestUserId 2",
+			};
+
+			await db.JobPostings.AddRangeAsync(jobPosting1, jobPosting2);
+			await db.SaveChangesAsync();
+
+			var result = await repository.GetAllAsync();
+			Assert.NotNull(result);
+			Assert.Equal(2, result.Count()); 
+		}
 	}
 }
