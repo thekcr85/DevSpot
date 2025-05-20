@@ -2,6 +2,7 @@
 using DevSpot.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace DevSpot.Controllers
 {
@@ -27,5 +28,12 @@ namespace DevSpot.Controllers
 
 			return View();
 		}
+
+		[HttpPost]
+		public async Task<IActionResult> Create(JobPosting jobPosting)
+		{
+			return RedirectToAction(nameof(Index));
+		}
 	}
 }
+
