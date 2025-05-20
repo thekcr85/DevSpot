@@ -111,5 +111,28 @@ namespace DevSpot.Tests
 			Assert.NotNull(result);
 			Assert.Equal(2, result.Count()); 
 		}
+
+		[Fact]
+		public async Task UpdateAsync_ShouldUpdateJobPosting()
+		{
+			var db = CreateDbContext();
+			var repository = new JobPostingRepository(db);
+			var jobPosting = new JobPosting
+			{
+				Title = "Test Title",
+				Description = "Test Description",
+				PostedDate = DateTime.Now,
+				Company = "Test Company",
+				Location = "Test Location",
+				UserId = "TestUserId",
+			};
+			await db.JobPostings.AddAsync(jobPosting);
+			await db.SaveChangesAsync();
+			jobPosting.Title = "Updated Title";
+			await repository.UpdateAsync(jobPosting);
+			var result = await db.JobPostings.FindAsync(jobPosting.Id);
+			Assert.NotNull(result);
+			Assert.Equal("Updated Title", result.Title);
+		}
 	}
 }
