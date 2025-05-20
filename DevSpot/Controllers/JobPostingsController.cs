@@ -35,8 +35,15 @@ namespace DevSpot.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				//jobPosting.UserId = _userManager.GetUserId(User);
-				//await _repository.AddAsync(jobPosting);
+				var jobPosting = new JobPosting
+				{
+					Title = jobPostingViewModel.Title,
+					Description = jobPostingViewModel.Description,
+					Company = jobPostingViewModel.Company,
+					Location = jobPostingViewModel.Location,
+					UserId = _userManager.GetUserId(User)
+				};
+				await _repository.AddAsync(jobPosting);
 			}
 			return RedirectToAction(nameof(Index));
 		}
